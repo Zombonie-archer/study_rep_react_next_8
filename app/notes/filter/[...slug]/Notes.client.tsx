@@ -7,9 +7,8 @@ import SearchBox from "@/components/SearchBox/SearchBox";
 import css from "./NotesPage.module.css";
 import type { Note } from "@/types/note";
 import { fetchNotes } from "@/lib/api";
-import Modal from "@/components/Modal/Modal";
-import NoteForm from "@/components/NoteForm/NoteForm";
 import { useDebouncedCallback } from "use-debounce";
+import Link from "next/link";
 
 interface NotesPageProps {
   tag: string;
@@ -18,9 +17,8 @@ interface NotesPageProps {
 function NotesPage({ tag }: NotesPageProps) {
   const [searchQuery, setSearchQuery] = useState<string>("");
   const [page, setPage] = useState<number>(1);
-  const [isCreateNote, setIsCreateNote] = useState<boolean>(false);
 
-  const { data } = useQuery({
+  const { data, isLoading, isError } = useQuery({
     queryKey: ["notes", searchQuery, tag, page],
     queryFn: () => fetchNotes(searchQuery, tag, page),
     placeholderData: (previousData) => previousData,
@@ -46,16 +44,15 @@ function NotesPage({ tag }: NotesPageProps) {
             onPageChange={setPage}
           />
         )}
-        <button className={css.button} onClick={() => setIsCreateNote(true)}>
+        <Link href={"/notes/action/create"} className={css.button}>
           Create note +
-        </button>
+        </Link>
       </header>
       {notes.length > 0 && <NoteList notes={notes} />}
-      {isCreateNote && (
-        <Modal onClose={() => setIsCreateNote(false)}>
-          <NoteForm onClose={() => setIsCreateNote(false)} />
-        </Modal>
-      )}
+      {isLoading && <p>Loading notes...</p>}
+      {isError && <p>Something went wrong...</p>}
+
+      {!isLoading && notes.length > 0 && <NoteList notes={notes} />}
     </div>
   );
 }

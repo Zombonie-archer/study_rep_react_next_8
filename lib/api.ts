@@ -7,7 +7,7 @@ export interface NotesHttpResponse {
   totalPages: number;
 }
 
-interface FetchNotesParams {
+export interface FetchNotesParams {
   search: string;
   tag?: string;
   page: number;
@@ -16,7 +16,7 @@ interface FetchNotesParams {
 
 export const fetchNotes = async (
   search: string,
-  tag: string,
+  tag: string | "all",
   page: number,
 ): Promise<NotesHttpResponse> => {
   const params: FetchNotesParams = {
