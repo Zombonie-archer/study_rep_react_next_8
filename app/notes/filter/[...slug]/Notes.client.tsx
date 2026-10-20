@@ -48,7 +48,6 @@ function NotesPage({ tag }: NotesPageProps) {
           Create note +
         </Link>
       </header>
-      {notes.length > 0 && <NoteList notes={notes} />}
       {isLoading && <p>Loading notes...</p>}
       {isError && <p>Something went wrong...</p>}
 

@@ -5,7 +5,7 @@ import {
   HydrationBoundary,
   QueryClient,
 } from "@tanstack/react-query";
-import { Metadata } from "next/dist/lib/metadata/types/metadata-interface";
+import type { Metadata } from "next";
 
 interface PageProps {
   params: {
@@ -13,13 +13,7 @@ interface PageProps {
   };
 }
 
-interface NotesPageProps {
-  params: Promise<{ slug: string[] }>;
-}
-
-export const generateMetadata = async ({
-  params,
-}: NotesPageProps): Promise<Metadata> => {
+export const generateMetadata = async ({ params }: { params: Promise<{ slug: string[] }> }): Promise<Metadata> => {
   const { slug } = await params;
   const tag = slug?.[0] === "all" ? "All notes" : slug?.[0] || "All notes";
 
