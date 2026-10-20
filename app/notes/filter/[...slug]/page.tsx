@@ -8,12 +8,10 @@ import {
 import type { Metadata } from "next";
 
 interface PageProps {
-  params: {
-    slug: string[];
-  };
+  params: Promise<{ slug: string[] }>;
 }
 
-export const generateMetadata = async ({ params }: { params: Promise<{ slug: string[] }> }): Promise<Metadata> => {
+export const generateMetadata = async ({ params }: PageProps): Promise<Metadata> => {
   const { slug } = await params;
   const tag = slug?.[0] === "all" ? "All notes" : slug?.[0] || "All notes";
 
